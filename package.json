@@ -1,5 +1,5 @@
 {
-  "name": "array-compress",
+  "name": "@ericwong3/array-compress",
   "version": "1.0.0",
   "description": "Compress and compact array of objects",
   "main": "index.js",
@@ -26,5 +26,9 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "mocha": "^5.2.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {}
 }
