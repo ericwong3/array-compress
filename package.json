@@ -1,0 +1,26 @@
+{
+  "name": "array-compress",
+  "version": "1.0.0",
+  "description": "Compress and compact array of objects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ericwong3/array-compress.git"
+  },
+  "keywords": [
+    "compress",
+    "compact",
+    "array",
+    "table",
+    "tabular"
+  ],
+  "author": "Eric Wong <eric_wong_3@hotmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ericwong3/array-compress/issues"
+  },
+  "homepage": "https://github.com/ericwong3/array-compress#readme"
+}
