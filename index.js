@@ -1,5 +1,5 @@
 function ArrayCompress(config){
-    this.config = config;s
+    this.config = config;
 }
 
 ArrayCompress.prototype.compress = function(data){
