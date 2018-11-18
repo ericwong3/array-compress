@@ -1,5 +1,5 @@
 function ArrayCompress(config){
-    // key present threshold %
+    this.config = config;s
 }
 
 ArrayCompress.prototype.compress = function(data){
@@ -17,7 +17,9 @@ ArrayCompress.prototype.compress = function(data){
     });
 
     // unique keys
-    keys = keys.filter((v,i) => keys.indexOf(v) === i);
+    keys = keys.filter(function(v,i){
+        return keys.indexOf(v) === i
+    });
 
     var compressed = data.map(function(item){
         if(typeof item === 'object'){

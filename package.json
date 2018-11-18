@@ -1,6 +1,6 @@
 {
   "name": "@ericwong3/array-compress",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compress and compact array of objects",
   "main": "index.js",
   "scripts": {
