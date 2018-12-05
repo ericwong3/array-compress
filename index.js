@@ -23,10 +23,29 @@ ArrayCompress.prototype.compress = function(data){
 
     var compressed = data.map(function(item){
         if(typeof item === 'object'){
-            return {
-                c: keys.map(function(key){
-                    return item[key];
-                }),
+            var compressed = [];
+            var fieldMap = [];
+            var needFieldMap = false;
+
+            keys.forEach(function(key, keyIndex){
+                if(item.hasOwnProperty(key)){
+                    compressed.push(item[key]);
+                    fieldMap[keyIndex] = true;
+                } else {
+                    fieldMap[keyIndex] = false;
+                    needFieldMap = true;
+                }
+            });
+
+            if(needFieldMap){
+                return {
+                    c: compressed,
+                    m: ArrayCompress.helpers.boolArrayToHex(fieldMap),
+                }
+            } else {
+                return {
+                    c: compressed,
+                }
             }
         } else {
             return {
@@ -50,15 +69,25 @@ ArrayCompress.prototype.decompress = function(data){
     var keys = data.ks;
 
     var decompressed = data.vs.map(function(item){
+        var ret = {};
+
         if(item.r){
-            return item.r;
+            ret = item.r;
+        } else if(item.m) { // if containing field map
+            var map = ArrayCompress.helpers.hexToBoolArray(item.m);
+            var counter = 0; // count progress in processing `c` array
+            map.forEach(function(bool, keyIndex){
+                if(bool){
+                    ret[keys[keyIndex]] = item.c[counter++];
+                }
+            });
         } else {
-            var ret = {};
             keys.forEach(function(key, i){
                 ret[key] = item.c[i];
             });
-            return ret;
         }
+
+        return ret;
     });
 
     return decompressed;
