@@ -23,12 +23,13 @@ Values: [['Alice', 'Taiwan'], ['Bob', 'United State']]
 ## Features
 
 - No dependency
-- Works even if some object has extra attributes
+- Works well with sparse data (e.g. each row has different property)
+- Works with data containing `null` and `undefined`
 - Covered by tests
 
 
 
-### Usage
+## Usage
 
 ```js
 var ArrayCompress = require('@ericwong3/array-compress');
@@ -56,10 +57,11 @@ console.log(JSON.stringify(myData).length);     // Raw Length: 287
 console.log(JSON.stringify(compressed).length); // Compressed length: 205, reduced by 28%
 
 var uncompressedData = compressor.decompress(compressed);
+// uncompressedData will be equal to myData
 ```
 
 
-### Compression Ratio
+## Compression Ratio
 
 The compression ratio largely depends on number of columns and rows. Since the approach is to deduplicate column keys, therefore compression ratio increase as number of columns or rows increase. For any moderately sized tabular, we expect to see at least 25% reduction in size.
 
@@ -69,3 +71,41 @@ One sample candidate application would be [LINE Rangers Handbook](https://ranger
 
 Conversely, it is *NOT recommended* for use with small dataset (i.e. <5 columns / <5 rows) as the compressed result might be even bigger than uncompressed.
 
+
+
+## Advanced Usage
+
+### Working with sparse data
+
+This program automatically scans the data and determine if each row is sparse, and applies a field mapping logic to leave out non-defined property from the compressed output. (Sparse is defined as "not containing all properties from all rows")
+
+As an example, if we compress:
+
+```js
+var myData = [
+    {a: 1,         b: 2,  c: 5   },
+    {a: 1,                       }, // sparse
+    {a: undefined, b: 7,         }, // sparse
+    {              b: 4,         }, // sparse
+    {                     c: 10  }, // sparse
+    {a: 50,        b: 51, c: null},
+]
+```
+
+The producted output will be:
+
+```js
+{
+    ks: ['a','b','c'],
+    vs: [
+        { c: [1, 2, 5]             },
+        { c: [1],            m: '1'},
+        { c: [undefined, 7], m: '3'},
+        { c: [4],            m: '2'},
+        { c: [10],           m: '4'},
+        { c: [50, 51, null]        },
+    ]
+}
+```
+
+For first and last row, since it contains all properties, `m` field will be omitted from output. And for the sparse rows, the `m` field will be used to denote how the values in `c` is being mapped to keys defined in `ks`. For the inner working of `m` field, please consult the source code.
