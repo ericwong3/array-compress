@@ -63,3 +63,23 @@ describe('ArrayCompress', function(){
         });
     });
 });
+
+describe('ArrayCompress.helpers', function(){
+    describe('hexToBoolArray', function(){
+        it('"2c" => [false, false, true, true, false, true, false, false]', function(){
+            assert.deepStrictEqual(
+                ArrayCompress.helpers.hexToBoolArray('2c'),
+                [false, false, true, true, false, true, false, false]
+            );
+        });
+    });
+
+    describe('boolArrayToHex', function(){
+        it('[false, false, true, true, false, true, false, false] => "2c"', function(){
+            assert.deepStrictEqual(
+                ArrayCompress.helpers.boolArrayToHex([false, false, true, true, false, true, false, false]),
+                '2c'
+            );
+        });
+    });
+});
