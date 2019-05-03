@@ -5,13 +5,12 @@ function ArrayCompress(config){
 ArrayCompress.prototype.compress = function(data){
     if(!Array.isArray(data)){
         throw new Error('compress expects array');
-        return;
     }
 
     // collect all object keys
     var keys = [];
     data.forEach(function(item){
-        if(typeof item === 'object'){
+        if(ArrayCompress.helpers.isRealObject(item)){
             keys = keys.concat(Object.keys(item));
         }
     });
@@ -22,7 +21,7 @@ ArrayCompress.prototype.compress = function(data){
     });
 
     var compressed = data.map(function(item){
-        if(typeof item === 'object'){
+        if(ArrayCompress.helpers.isRealObject(item)){
             var compressed = [];
             var fieldMap = [];
             var needFieldMap = false;
@@ -71,7 +70,7 @@ ArrayCompress.prototype.decompress = function(data){
     var decompressed = data.vs.map(function(item){
         var ret = {};
 
-        if(item.r){
+        if(item.hasOwnProperty('r')){
             ret = item.r;
         } else if(item.m) { // if containing field map
             var map = ArrayCompress.helpers.hexToBoolArray(item.m);
@@ -120,6 +119,17 @@ ArrayCompress.helpers = {
         }
         return ret;
     },
+
+    /**
+     * Returns whether `obj` is an "actual" object like {a: 1}, will return false for array and null
+     */
+    isRealObject: function(obj){
+        return (
+            typeof obj === 'object'
+            && obj !== null
+            && !Array.isArray(obj)
+        );
+    }
 }
 
 if(typeof module === 'object'){

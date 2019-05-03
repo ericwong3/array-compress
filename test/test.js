@@ -20,12 +20,15 @@ var testCombinations = {
     
     'when data contains non-object': {
         config: undefined,
-        expanded: [{a: 1}, 'haha'],
+        expanded: [null, undefined, {a: 1}, 'haha', [123, 'hehe']],
         compact: {
             ks: ['a'],
             vs: [
+                { r: null },
+                { r: undefined },
                 { c: [1] },
                 { r: 'haha' },
+                { r: [123, 'hehe'] },
             ]
         }
     },
